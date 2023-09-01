@@ -1,6 +1,6 @@
 object campo{
 	const hectareasTotales=15
-	var hectareasLibres=hectareasTotales - trigo.cantHect() - soja.cantHect() - maiz.cantHect()
+	var hectareasSembradas=trigo.cantHect()+ soja.cantHect() +maiz.cantHect()+tomate.cantHect()
 	var dineroEnCuenta=5000
 	method hectTot(){return hectareasTotales}
 	method cuentaBancaria(){return dineroEnCuenta}
@@ -9,13 +9,14 @@ object campo{
    		cultivo.fertilizacion()
     	dineroEnCuenta=dineroEnCuenta - cultivo.costoT()
 	}
-	method sequia(cultivo) {
- 	   var cantHect = cultivo.cantHect()
+	method sequia(cultivo,cultivo2) {
+ 	   	const cantHect = cultivo.cantHect()
    		cultivo.vaciar()
-   		cultivo.siembra(cantHect)
-    	dineroEnCuenta = dineroEnCuenta - cultivo.costoT()
-	}
+   		cultivo2.siembra(cantHect)
+    	dineroEnCuenta = dineroEnCuenta - cultivo.costoT() 
+	}// vacio todo el campo y siembro otro cultivo
 	method sembrar(cultivo,_cantHect){
+		if(hectareasSembradas==cultivo.cantHect()) // verifico que solo haya un tipo de cultivo, en su defecto no planto nada
 		cultivo.siembra(_cantHect)
 		dineroEnCuenta=dineroEnCuenta-cultivo.costoT()
 	}
