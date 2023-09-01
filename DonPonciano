@@ -1,17 +1,27 @@
 object campo{
 	const hectareasTotales=15
-	var hectareasLibres=hectareasTotales-trigo.cantHecTrigo() - soja.cantHecSoja()-maiz.cantHecMaiz()
+	var hectareasLibres=hectareasTotales - trigo.cantHect() - soja.cantHect() - maiz.cantHect()
 	var dineroEnCuenta=5000
-	
+	method hectTot(){return hectareasTotales}
+	method cuentaBancaria(){return dineroEnCuenta}
 	method fumigacion(){dineroEnCuenta=dineroEnCuenta-10*hectareasTotales}
 	method fertilizar(cultivo) {
    		cultivo.fertilizacion()
     	dineroEnCuenta=dineroEnCuenta - cultivo.costoT()
-}
-	method resembrarXSequia(cultivo){dineroEnCuenta=dineroEnCuenta-cultivo.resiembra()}
-	method sembrar(cultivo){
-		cultivo.siembra()
+	}
+	method sequia(cultivo) {
+ 	   var cantHect = cultivo.cantHect()
+   		cultivo.vaciar()
+   		cultivo.siembra(cantHect)
+    	dineroEnCuenta = dineroEnCuenta - cultivo.costoT()
+	}
+	method sembrar(cultivo,_cantHect){
+		cultivo.siembra(_cantHect)
 		dineroEnCuenta=dineroEnCuenta-cultivo.costoT()
+	}
+	method cosechar(cultivo){
+		dineroEnCuenta=cultivo.venta()
+		cultivo.vaciar()
 	}
 }
 
@@ -26,13 +36,16 @@ object trigo {
 		rendimiento=rendimiento+2
 	}
 	method venta(){return rendimiento*hectareasTrigo*precioQuintal}
-	method cantHecTrigo(){return hectareasTrigo}
+	method cantHect(){return hectareasTrigo}
 	method costoT(){return costoF}
-	method resiembra(){return hectareasTrigo*valorSemilla}
+	method vaciar(){hectareasTrigo=0}
 	method siembra(_cantHect){
+		if(hectareasTrigo+_cantHect<=campo.hectTot()){
 		hectareasTrigo=hectareasTrigo+_cantHect
-		costoF=_cantHect*valorSemilla
-	}
+		costoF=_cantHect*valorSemilla}
+		else 
+			hectareasTrigo=campo.hectTot()
+			costoF=campo.hectTot()*valorSemilla}
 }
 
 object maiz{
@@ -47,13 +60,16 @@ object maiz{
 		else costoF=maxPrecio
 	}
 	method venta(){return hectareasMaiz*rendimiento*soja.precioQuintalSoja()/2}
-	method cantHecMaiz(){return hectareasMaiz}
+	method cantHect(){return hectareasMaiz}
 	method costoT(){return costoF}
-	method resiembra(){return hectareasMaiz*valorSemilla}
+	method vaciar(){ hectareasMaiz=0}
 	method siembra(_cantHect){
-		hectareasMaiz=hectareasMaiz+_cantHect
-		costoF=_cantHect*valorSemilla
-	}
+		if(hectareasMaiz+_cantHect<=campo.hectTot()){
+			hectareasMaiz=hectareasMaiz+_cantHect
+			costoF=_cantHect*valorSemilla}
+		else 
+			hectareasMaiz=campo.hectTot()
+			costoF=campo.hectTot()*valorSemilla}
 }
 
 object soja{
@@ -72,12 +88,38 @@ object soja{
 			rendimiento=20
 	}
 	method venta(){return self.precioQuintalSoja()*rendimiento*hectareasSoja*0.65}
-	method cantHecSoja(){return hectareasSoja}
+	method cantHect(){return hectareasSoja}
 	method costoT(){return costoF}
-	method resiembra(){return hectareasSoja*valorSemilla}
-		method siembra(_cantHect){
-		hectareasSoja=hectareasSoja+_cantHect
-		costoF=_cantHect*valorSemilla
-	}
+	method vaciar() {hectareasSoja=0}
+	method siembra(_cantHect){
+		if(hectareasSoja+_cantHect<=campo.hectTot()){
+			hectareasSoja=hectareasSoja+_cantHect
+			costoF=_cantHect*valorSemilla}
+		else 
+			hectareasSoja=campo.hectTot()
+			costoF=campo.hectTot()*valorSemilla}
 	
 }
+
+object tomate{
+	const precioQuintal=2300
+	const valorSemilla=177
+	var hectareasTomate=0
+	var rendimiento=10
+	var costoF=0
+	method fertilizacion(){
+		costoF=valorSemilla*hectareasTomate
+		rendimiento=rendimiento*0.23
+	}
+	method venta(){return rendimiento*hectareasTomate*precioQuintal*0.87}
+	method cantHect(){return hectareasTomate}
+	method costoT(){return costoF}
+	method vaciar(){hectareasTomate=0}
+	method siembra(_cantHect){
+		if(hectareasTomate+_cantHect<=campo.hectTot()){
+			hectareasTomate=hectareasTomate+_cantHect
+			costoF=_cantHect*valorSemilla}
+		else 
+			hectareasTomate=campo.hectTot()
+			costoF=campo.hectTot()*valorSemilla}
+	}
