@@ -1,0 +1,63 @@
+object campo{
+	const hectareasTotales=15
+	var hectareasLibres=hectareasTotales-trigo.cantHecTrigo() - soja.cantHecSoja()-maiz.cantHecMaiz()
+	var dineroEnCuenta=5000
+	
+	method fumigacion(){
+		dineroEnCuenta=dineroEnCuenta-10*hectareasTotales
+	}
+
+}
+
+object trigo {
+	const precioQuintal=1000
+	var hectareasTrigo=10
+	var rendimiento=10
+	var costo=0
+	method cantHecTrigo(){
+		return hectareasTrigo
+	}
+	
+	method fertilizar(){
+		costo=500*hectareasTrigo
+		rendimiento=rendimiento+2
+	}
+	
+	method venta(){
+		return rendimiento*hectareasTrigo*precioQuintal
+	}
+}
+
+object maiz{
+	const maxPrecio=5000
+	const rendimiento=15
+	var hectareasMaiz=0
+	var costo=0
+	
+	method cantHecMaiz(){
+		return hectareasMaiz
+	}
+	method fertilizar(){
+		if( 500*hectareasMaiz<=maxPrecio)
+		costo=500*hectareasMaiz
+		else costo=maxPrecio
+	}
+	method venta(){
+	return soja.venta()/2	
+	}
+}
+
+object soja{
+	var hectareasSoja=0
+	var dolarSoja=450
+	method cantHecSoja(){
+		return hectareasSoja
+	}
+	
+	
+	method venta(){
+		return 0
+}
+
+
+}
