@@ -2,33 +2,37 @@ object campo{
 	const hectareasTotales=15
 	var hectareasSembradas=trigo.cantHect()+ soja.cantHect() +maiz.cantHect()+tomate.cantHect()
 	var dineroEnCuenta=5000
+	method hectSemb(){return hectareasSembradas}	
 	method hectTot(){return hectareasTotales}
 	method cuentaBancaria(){return dineroEnCuenta}
-	method fumigacion(){dineroEnCuenta=dineroEnCuenta-10*hectareasTotales}
+	method fumigar(){dineroEnCuenta=dineroEnCuenta-10*hectareasTotales}
 	method fertilizar(cultivo) {
+		if(hectareasSembradas==cultivo.cantHect())
    		cultivo.fertilizacion()
     	dineroEnCuenta=dineroEnCuenta - cultivo.costoT()
 	}
 	method sequia(cultivo,cultivo2) {
- 	   	const cantHect = cultivo.cantHect()
+ 	   	var cantHect = cultivo.cantHect()
    		cultivo.vaciar()
    		cultivo2.siembra(cantHect)
-    	dineroEnCuenta = dineroEnCuenta - cultivo.costoT() 
+    	dineroEnCuenta = dineroEnCuenta-cultivo2.costoT() 
 	}// vacio todo el campo y siembro otro cultivo
 	method sembrar(cultivo,_cantHect){
 		if(hectareasSembradas==cultivo.cantHect()) // verifico que solo haya un tipo de cultivo, en su defecto no planto nada
 		cultivo.siembra(_cantHect)
 		dineroEnCuenta=dineroEnCuenta-cultivo.costoT()
+		hectareasSembradas=_cantHect
 	}
 	method cosechar(cultivo){
-		dineroEnCuenta=cultivo.venta()
+		dineroEnCuenta=dineroEnCuenta+cultivo.venta()
 		cultivo.vaciar()
+		hectareasSembradas=0
 	}
 }
 
 object trigo {
 	const precioQuintal=1000
-	const valorSemilla=199
+	const valorSemilla=875
 	var hectareasTrigo=10
 	var rendimiento=10
 	var costoF=0
@@ -52,7 +56,7 @@ object trigo {
 object maiz{
 	const maxPrecio=5000
 	const rendimiento=15
-	const valorSemilla=199
+	const valorSemilla=25000
 	var hectareasMaiz=0
 	var costoF=0
 	method fertilizacion(){
@@ -76,7 +80,7 @@ object maiz{
 object soja{
 	const dolarSoja=450
 	const valorChicago=551.17
-	const valorSemilla=199
+	const valorSemilla=200000
 	var hectareasSoja=0
 	var rendimiento=20
 	var costoF=0
@@ -104,13 +108,13 @@ object soja{
 
 object tomate{
 	const precioQuintal=2300
-	const valorSemilla=177
+	const valorSemilla=1770
 	var hectareasTomate=0
 	var rendimiento=10
 	var costoF=0
 	method fertilizacion(){
 		costoF=valorSemilla*hectareasTomate
-		rendimiento=rendimiento*0.23
+		rendimiento=rendimiento*1.23
 	}
 	method venta(){return rendimiento*hectareasTomate*precioQuintal*0.87}
 	method cantHect(){return hectareasTomate}
